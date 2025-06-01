@@ -69,9 +69,10 @@ public class CardEffects
     {
         target.ApplyDamage(damage);
     }
-    public static void eff_def_shield(Status target, int shield)
+    public static void eff_def_Stamina(Status target, int stamina)
     {
-        target.AddShield(shield);
+        Debug.Log("add shield to "+target);
+        target.AddStamina(stamina);
     }
 }
 
@@ -83,7 +84,7 @@ public class CardDataManager : MonoBehaviour
         // 설명에 수치 대입 후에 추가가
         /* 이름, 타입, 효과, 연계, 코드 */
         new Card("slash", "피해를 줍니다", 5, TargetType.Enemy, cardType.attack, (target, damage)=>CardEffects.eff_def_attack(target, 10),   new cardType[1]{cardType.attack},  cardCord.Card_Test_Attack_1),
-        new Card("shield",  "방어력을 얻습니다", 5, TargetType.Self, cardType.defend, (target, damage)=>CardEffects.eff_def_shield(target, 10),   new cardType[1]{cardType.defend},  cardCord.Card_Test_Defend_1)
+        new Card("stamina",  "방어력을 얻습니다", 5, TargetType.Self, cardType.defend, (target, damage)=>CardEffects.eff_def_Stamina(target, 10),   new cardType[1]{cardType.defend},  cardCord.Card_Test_Defend_1)
     };
 
     public Card GetCardDataByNum(cardCord num)

@@ -6,6 +6,8 @@ TagManager:
   tags:
   - player
   - enemy
+  - SnapSlot
+  - Card
   layers:
   - Default
   - TransparentFX
@@ -42,4 +44,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: UI
+    uniqueID: 2916548231
+    locked: 0
+  - name: Card
+    uniqueID: 438673265
+    locked: 0
+  - name: Menu
+    uniqueID: 502207001
     locked: 0

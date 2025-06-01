@@ -9,8 +9,7 @@ public class CardViewer : MonoBehaviour
     [Header("참조 스크립트")]
     public CardUIController cardUIController;
     public CardDataManager cardDataManager;
-    // 테스트용 임시 호출
-    public StatusManager statusManager;
+    public CardSnapSlot cardSnapSlot;
 
     public Image backImage;
     public Image frontImage;
@@ -20,24 +19,84 @@ public class CardViewer : MonoBehaviour
     public Transform ChanePanel;
     public Image ChaneList;
 
+    private bool isDragging = false;
+    private Vector3 offset;
+    private Vector3 lastPos;        // 드래그 되기 직전의 위치치
+    private float snapRange = 1.0f;
+
+
     private Card cardData;
 
-    public void Start()
-    { 
-        cardUIController = GetComponentInParent<CardUIController>();
-        cardDataManager = GameObject.Find("GameSystem").GetComponent<CardDataManager>();
-        statusManager = GameObject.Find("GameSystem").GetComponent<StatusManager>();
-    }
     public void Setup(Card data)
     {
         cardData = data;
         nameText.text = data.GetName();
         //artworkImage.sprite = data.Artwork;
     }
-
-    // 해당 카드를 클릭 된 카드로 등록
-    public void OnMouseDown()
+ 
+    public void Start()
     {
-        cardUIController.cilkedCard = cardData;
+        // 필수 컴포넌트 불불러오기
+        cardUIController = GetComponentInParent<CardUIController>();
+        cardDataManager = GameObject.Find("GameSystem").GetComponent<CardDataManager>();
+        cardSnapSlot = GetComponentInParent<CardSnapSlot>();
+    }
+
+    void Update()
+    {
+        // 카드 클릭시 드래그
+        if (isDragging)
+        {
+            Vector3 mouseScreenPos = Input.mousePosition;
+            mouseScreenPos.z = 0.0f;
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
+
+            transform.position = mouseWorldPos + offset;
+        }
+    }
+
+    void OnMouseDown()
+    {
+        isDragging = true;
+        lastPos = GetComponent<RectTransform>().anchoredPosition;   //클릭 직전 카드 위치 저장
+        cardUIController.cilkedCard = cardData;                     // 클릭 된 카드 등록
+        
+        // 마우스 위치에 따른 드래그
+        Vector3 mouseScreenPos = Input.mousePosition;
+        mouseScreenPos.z = 0.0f;
+        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
+        offset = transform.position - mouseWorldPos;
+
+        //스냅 위치 보여주기 혹은 자동 트래킹 등
+    }
+
+    void OnMouseUp()
+    {
+        isDragging = false;
+
+        RectTransform rectTransform = GetComponent<RectTransform>();
+        // 1. 마우스 위치를 월드 좌표로 변환
+        Vector3 mouseScreenPos = Input.mousePosition;
+        mouseScreenPos.z = 0f; // 또는 카메라에서의 거리값 (UI라면 0이면 충분)
+
+        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
+        mouseWorldPos.z = 0; // UI에서는 z=0 고정
+
+        // 2. 스냅 위치 계산
+        RectTransform slot = cardSnapSlot.GetNearestSlotPosition(mouseWorldPos, snapRange);
+        Vector2 nearest = slot.position;
+
+        // 3. 스냅 여부 판단
+        if (nearest != (Vector2)mouseWorldPos)
+        {
+            rectTransform.position = nearest; // 스냅 성공
+            //Card 데이터도 따로로 넣기
+            int index = cardSnapSlot.slots.IndexOf(slot);
+            cardSnapSlot.cardInQueue[index] = cardData;
+        }
+        else
+        {
+            rectTransform.anchoredPosition = lastPos; // 스냅 실패 → 원위치
+        }
     }
 }
