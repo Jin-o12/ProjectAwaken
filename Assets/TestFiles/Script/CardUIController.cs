@@ -13,32 +13,26 @@ public class CardUIController : MonoBehaviour
     [SerializeField] public Transform ReadyQueuePanel;   // 카드 대기 패널
     [SerializeField] public GameObject cardPrefab;       // 카드 프리팹 (UI용)
 
-    private CardSnapSlot[] handSnapSlot;
-    private CardSnapSlot[] readySnapSlot;
     public Card cilkedCard = null;
+    public int connectable;
 
-    void Update()
+    void Start()
     {
+        connectable = 0;
     }
 
     public void DrawHand(List<cardCord> handList)
     {
-        // 기존 카드 제거
-        //foreach (Transform child in handPanel)
-        //{
-        //    Destroy(child.gameObject);
-        //}
-
         // 새 카드 생성
         for (int i = 0; i < handList.Count; i++)
         {
-            // 카드 데이터 가져옴 및 배치치
+            // 카드 데이터 가져옴 및 배치
             cardCord code = handList[i];
             GameObject cardObj = Instantiate(cardPrefab, handPanel);
             HandCardPos(cardObj, i, handList.Count);
 
             CardViewer view = cardObj.GetComponent<CardViewer>();
-            view.Setup(cardDataManager.GetCardDataByNum(code));
+            view.Setup(cardDataManager.GetCardDataByNum(code), cardObj);
         }
     }
 
@@ -53,11 +47,4 @@ public class CardUIController : MonoBehaviour
 
         rt.anchoredPosition = new Vector2(xPos, yPos);
     }
-
-    void StockCardInQueue()
-    {
-
-    }
-
-
 }

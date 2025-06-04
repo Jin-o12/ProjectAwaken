@@ -14,9 +14,7 @@ public class StatusViewer : MonoBehaviour
     [Header("UI")]
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI hpText;
-    public TextMeshProUGUI staminaText;
     public Image hpBar;
-    public Image staminaBar;
     public Image Artwork;
 
     public Status statusData;
@@ -34,7 +32,6 @@ public class StatusViewer : MonoBehaviour
         // ※참조복사 주의
         statusData = obj;
         maxHP = statusData.GetHP();
-        maxStamina = statusData.GetStamina();
 
         if (statusData.GetName() == null)
             nameText.text = $"";
@@ -42,15 +39,6 @@ public class StatusViewer : MonoBehaviour
             nameText.text = statusData.GetName();
 
         hpText.text = $"{statusData.GetHP()}/{maxHP}";
-        staminaText.text = $"{statusData.GetStamina()}/{maxStamina}";
-    }
-
-    public void OnMouseDown()
-    {
-        if (cardUIController.cilkedCard != null)
-        {
-            statusManager.ExecuteCardEffect(cardUIController.cilkedCard, statusData);
-        }
     }
 
     void Update()
@@ -64,9 +52,5 @@ public class StatusViewer : MonoBehaviour
         hpText.text = $"{statusData.GetHP()}/{maxHP}";
         float fillAmountHP = (float)statusData.GetHP() / (float)maxHP;
         hpBar.fillAmount = fillAmountHP;
-        // 기력
-        staminaText.text = $"{statusData.GetStamina()}/{maxStamina}";
-        float fillAmountStamina = (float)statusData.GetStamina() / (float)maxStamina;
-        staminaBar.fillAmount = fillAmountStamina;
     }
 }

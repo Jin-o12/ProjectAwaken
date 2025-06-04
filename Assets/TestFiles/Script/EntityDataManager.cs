@@ -7,29 +7,22 @@ public class Status
 {
     protected string name = null;
     protected int hp;
-    protected int stamina;
 
     /* Set */
     public void SetName(string name) { this.name = name; }  
     public void SetHP(int hp) { this.hp = hp; }
-    public void SetStamina(int stamina) { this.stamina = stamina; }
     /* Get */
     public string GetName() { return name; }
     public int GetHP() { return hp; }
-    public int GetStamina() { return stamina; }
 
     public void appHP(int hp) { this.hp -= hp; }
-    public void appStamina(int stamina) { this.stamina -= stamina; }
 
     public void ApplyDamage(int dmg)
     {
-        int net = Mathf.Max(0, dmg - stamina);
-        stamina = Mathf.Max(0, stamina - dmg);
-        hp -= net;
+        hp -= dmg;
     }
 
     public void AddHeal(int _amount) { hp += _amount; }
-    public void AddStamina(int _amount) { stamina += _amount; }
 
     public Status() { }
 }
@@ -37,11 +30,15 @@ public class Status
 public class PlayerStatus : Status
 {
     int handSize = 5;
+    /// <summary>
+    /// 카드 각각의 강화 수치를 표현하기 위해 Card 클래스로 바꿀 것 (혹은 덱 리스트를 저장하는 다른방식 사용)
+    /// </summary>
     public List<cardCord> handList = new List<cardCord>();
-    public PlayerStatus(int hp, int stamina)
+    public List<cardCord> discardPile = new List<cardCord>();
+
+    public PlayerStatus(int hp)
     {
         this.hp = hp;
-        this.stamina = stamina;
     }
 
     public void AddCardToHand(cardCord code)
@@ -52,13 +49,17 @@ public class PlayerStatus : Status
 
 public class EnemyStatus : Status
 {
-    public EnemyStatus(string name, int hp, int stamina)
+    List<Card> actionList;
+    public EnemyStatus(string name, int hp)
     {
         this.name = name;
         this.hp = hp;
-        this.stamina = stamina;
     }
     public void AddHP(int hp) { this.hp += hp; }
+    public void GetBattleAction(EnemyStatus enemy)
+    {
+        
+    }
 }
 
 public class EntityDataManager : MonoBehaviour
@@ -67,8 +68,8 @@ public class EntityDataManager : MonoBehaviour
     [SerializeField] EntityUIController entityUIController;
     [SerializeField] CardUIController cardUIController;
 
-    public PlayerStatus player = new PlayerStatus(20, 10);
-    public EnemyStatus enemy = new EnemyStatus("creature", 10, 5);
+    public PlayerStatus player = new PlayerStatus(30);
+    public EnemyStatus enemy = new EnemyStatus("creature", 30);
     void Start()
     {
         BattleBegin(player, enemy);
@@ -98,22 +99,23 @@ public class EntityDataManager : MonoBehaviour
         
         // 손패 데이터를 받아오고 그만큼 카드 생성으로 바꿀 것
         playerPS.AddCardToHand(cardCord.Card_Test_Attack_1);
-        playerPS.AddCardToHand(cardCord.Card_Test_Defend_1);
+        playerPS.AddCardToHand(cardCord.Card_Test_Attack_1);
     }
 
-    public void ExecuteCardEffect(Card card, Status target)
+    public void ExecuteCardEffect(Card card, TargetType target)
     {
-        //임시 이펙트 확인용 코드
-        switch (card.GetTarget())
+        switch (target)
         {
             case TargetType.Enemy:
-                Debug.Log("Card Activated: " + card.GetName() + " to " + target.GetName());
-                card?.Activate(target, card.GetValue());
+                card?.Activate(enemy, card.GetValue());
                 break;
             case TargetType.Self:
+                card?.Activate(player, card.GetValue());
                 break;
             default:
                 break;
         }
+
+        cardUIController.connectable += card.GetChain() - card.GetValue();
     }
 }
