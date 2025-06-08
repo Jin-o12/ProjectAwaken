@@ -75,6 +75,7 @@ static public class CardEffects
 {
     public static void eff_def_attack(Status target, int dmg)
     {
+        Debug.Log("eff_def_attack to " + target);
         target.ApplyDamage(dmg);
     }
 }

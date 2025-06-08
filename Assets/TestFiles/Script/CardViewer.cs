@@ -9,7 +9,6 @@ public class CardViewer : MonoBehaviour
     [Header("참조 스크립트")]
     public CardUIController cardUIController;
     public CardDataManager cardDataManager;
-    public CardReadySnapSlot cardReadySnapSlot;
 
     public Image backImage;
     public Image frontImage;
@@ -22,14 +21,13 @@ public class CardViewer : MonoBehaviour
     private bool isDragging = false;
     private Vector3 offset;
     private Vector3 lastPos;        // 드래그 되기 직전의 위치치
-    private float snapRange = 1.0f;
+    private float snapRange = 5.0f;
 
 
     private Card cardData;
 
-    public void Setup(Card data, GameObject cardObj)
+    public void SetupCardData(Card data)
     {
-        data.SetCardObject(cardObj);
         cardData = data;
         nameText.text = data.GetName();
         effectText.text = data.GetExplan();
@@ -48,7 +46,7 @@ public class CardViewer : MonoBehaviour
         // 필수 컴포넌트 불러오기
         cardUIController = GetComponentInParent<CardUIController>();
         cardDataManager = GameObject.Find("GameSystem").GetComponent<CardDataManager>();
-        cardReadySnapSlot = GetComponentInParent<CardReadySnapSlot>();
+        cardUIController = GetComponentInParent<CardUIController>();
     }
 
     void Update()
@@ -91,9 +89,8 @@ public class CardViewer : MonoBehaviour
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
         mouseWorldPos.z = 0; // UI에서는 z=0 고정
 
-
         // 2. 스냅 위치 계산
-        RectTransform slot = cardReadySnapSlot.GetNearestSlotPosition(mouseWorldPos, snapRange);
+        RectTransform slot = cardUIController.GetNearestSlotPosition(mouseWorldPos, snapRange, cardData);
         if (slot == null)   //슬롯과 카드의 거리가 너무 멀 때, 슬롯이 비는(null판정) 경우가 생겨 중간에 예외처리함(코드 더 깔끔하게 손볼 것)//
         {
             rectTransform.anchoredPosition = lastPos;
@@ -105,9 +102,6 @@ public class CardViewer : MonoBehaviour
         if (nearest != (Vector2)mouseWorldPos)
         {
             rectTransform.position = nearest; // 스냅 성공
-            //Card 데이터도 따로로 넣기
-            int index = cardReadySnapSlot.slots.IndexOf(slot);
-            cardReadySnapSlot.cardInQueue[index] = cardData;
         }
         else
         {

@@ -509,6 +509,9 @@ GameObject:
   - component: {fileID: 602111967}
   - component: {fileID: 602111966}
   - component: {fileID: 602111969}
+  - component: {fileID: 602111972}
+  - component: {fileID: 602111971}
+  - component: {fileID: 602111970}
   m_Layer: 0
   m_Name: GameSystem
   m_TagString: Untagged
@@ -563,6 +566,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entityUIController: {fileID: 769149309}
   cardUIController: {fileID: 707615806}
+--- !u!114 &602111970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 602111965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 900b3ab086ae79346a7477fafc8c5724, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityDataManager: {fileID: 602111969}
+  deckManager: {fileID: 602111971}
+  nowEnemyCode: 1
+--- !u!114 &602111971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 602111965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27049b60e407c91488831a7b5f344bb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardDataManager: {fileID: 602111966}
+  enemyBattleData: {fileID: 602111972}
+  cardUIController: {fileID: 707615806}
+  cardViewer: {fileID: 293965804327604784, guid: ebd765e77a8fffb409906099c28b79a9, type: 3}
+--- !u!114 &602111972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 602111965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc13e40c049053248bfd3232da3b128a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &707615804
 GameObject:
   m_ObjectHideFlags: 0
@@ -617,10 +663,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardDataManager: {fileID: 602111966}
+  deckManager: {fileID: 602111971}
+  cardViewer: {fileID: 0}
   handPanel: {fileID: 1557841474}
   ReadyQueuePanel: {fileID: 158425564}
   cardPrefab: {fileID: 8663110544444987369, guid: ebd765e77a8fffb409906099c28b79a9, type: 3}
   connectable: 0
+  handCardNum: 0
 --- !u!114 &707615807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -634,10 +683,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entityDataManager: {fileID: 602111969}
+  deckManager: {fileID: 602111971}
   numberOfReadySlots: 5
   readySlotUI: {fileID: 158425564}
   slotPrefab: {fileID: 3106016247326442596, guid: aea850a015ab01a42899caa724f8a152, type: 3}
-  slots: []
+  slotsTrans: []
 --- !u!1 &762307182
 GameObject:
   m_ObjectHideFlags: 0

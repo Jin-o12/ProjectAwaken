@@ -19,7 +19,6 @@ public class StatusViewer : MonoBehaviour
 
     public Status statusData;
     private int maxHP;
-    private int maxStamina;
 
     public void Start()
     {
