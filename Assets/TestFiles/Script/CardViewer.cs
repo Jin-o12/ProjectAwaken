@@ -9,37 +9,44 @@ public class CardViewer : MonoBehaviour
     [Header("참조 스크립트")]
     public CardUIController cardUIController;
     public CardDataManager cardDataManager;
-    public CardSnapSlot cardSnapSlot;
 
     public Image backImage;
     public Image frontImage;
     public Image artworkImage;
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI effectText;
-    public Transform ChanePanel;
-    public Image ChaneList;
+    public TextMeshProUGUI DamageNumText;
+    public TextMeshProUGUI ChainNumText;
 
     private bool isDragging = false;
     private Vector3 offset;
     private Vector3 lastPos;        // 드래그 되기 직전의 위치치
-    private float snapRange = 1.0f;
+    private float snapRange = 5.0f;
 
 
     private Card cardData;
 
-    public void Setup(Card data)
+    public void SetupCardData(Card data)
     {
         cardData = data;
         nameText.text = data.GetName();
-        //artworkImage.sprite = data.Artwork;
+        effectText.text = data.GetExplan();
+        DamageNumText.text = data.GetValue().ToString();
+        ChainNumText.text = data.GetChain().ToString();
+        artworkImage.sprite = data.GetArtwork();
     }
- 
+
+    public void SetArtwork(Sprite img)
+    {
+        artworkImage.sprite = img;
+    }
+
     public void Start()
     {
-        // 필수 컴포넌트 불불러오기
+        // 필수 컴포넌트 불러오기
         cardUIController = GetComponentInParent<CardUIController>();
         cardDataManager = GameObject.Find("GameSystem").GetComponent<CardDataManager>();
-        cardSnapSlot = GetComponentInParent<CardSnapSlot>();
+        cardUIController = GetComponentInParent<CardUIController>();
     }
 
     void Update()
@@ -83,20 +90,23 @@ public class CardViewer : MonoBehaviour
         mouseWorldPos.z = 0; // UI에서는 z=0 고정
 
         // 2. 스냅 위치 계산
-        RectTransform slot = cardSnapSlot.GetNearestSlotPosition(mouseWorldPos, snapRange);
+        RectTransform slot = cardUIController.GetNearestSlotPosition(mouseWorldPos, snapRange, cardData);
+        if (slot == null)   //슬롯과 카드의 거리가 너무 멀 때, 슬롯이 비는(null판정) 경우가 생겨 중간에 예외처리함(코드 더 깔끔하게 손볼 것)//
+        {
+            rectTransform.anchoredPosition = lastPos;
+            return;
+        }
         Vector2 nearest = slot.position;
 
         // 3. 스냅 여부 판단
         if (nearest != (Vector2)mouseWorldPos)
         {
             rectTransform.position = nearest; // 스냅 성공
-            //Card 데이터도 따로로 넣기
-            int index = cardSnapSlot.slots.IndexOf(slot);
-            cardSnapSlot.cardInQueue[index] = cardData;
         }
         else
         {
             rectTransform.anchoredPosition = lastPos; // 스냅 실패 → 원위치
         }
+        return;
     }
 }

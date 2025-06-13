@@ -6,8 +6,9 @@ TagManager:
   tags:
   - player
   - enemy
-  - SnapSlot
   - Card
+  - HandSlot
+  - ReadySlot
   layers:
   - Default
   - TransparentFX
