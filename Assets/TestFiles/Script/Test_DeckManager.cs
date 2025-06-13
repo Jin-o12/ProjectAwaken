@@ -8,29 +8,23 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class DeckManager : MonoBehaviour
+public class Test_DeckManager : MonoBehaviour
 {
-    [SerializeField] public CardDataManager cardDataManager;
-    [SerializeField] public EnemyBattleData enemyBattleData;
-    [SerializeField] public CardUIController cardUIController;
-    [SerializeField] public CardViewer cardViewer;
+    [SerializeField] public Test_CardDataManager cardDataManager;
+    [SerializeField] public Test_EnemyBattleData enemyBattleData;
+    [SerializeField] public Test_CardUIController cardUIController;
+    [SerializeField] public Test_CardViewer cardViewer;
 
     /* 플레이어 손패, 덱, 버린덱 */
     private int handSize;
     private int chainStack;
+    private int nextTurnDraw;
     private List<Card> playerHandList = new List<Card>();
     private List<Card> playerDeckList = new List<Card>();
     private List<Card> playerdiscardPile = new List<Card>();
 
     /* 적 정보 */
     private cardCord[][] EnemyActionList;
-
-
-    void Start()
-    {
-        AddNewCardToDeck(cardCord.Card_Test_Attack_1);
-    }
-
 
     /* Get Function */
     public List<Card> GetHandList()
@@ -50,8 +44,9 @@ public class DeckManager : MonoBehaviour
     /* 전투 시작시 덱과 카드 준비 */
     public void BattleBegin_CardSetting(enemyCode code)
     {
-        handSize = 5;
+        handSize = GameConstants.handSize;
         chainStack = 0;
+        nextTurnDraw = 1;
 
         for (int c = 0; c < handSize; c++)
         {
@@ -64,6 +59,11 @@ public class DeckManager : MonoBehaviour
     public void GoToNextTurn()
     {
         ReadyEnemyAction();
+        for (int i = 0; i < nextTurnDraw; i++)
+        { 
+            DrawCardFromDeck();
+        }
+            
     }
 
     /* 턴 당 적 행동 설정(List<Card>) */
@@ -95,7 +95,7 @@ public class DeckManager : MonoBehaviour
         }
         //// 랜덤 드로우 기능 추가 할 것 /////
         int draw = 0;   // 랜덤 수치 대입 및 해당 카드 드로우 카드로 지정
-        Debug.Log("playerDeckList" + playerDeckList[draw].GetName());
+        Debug.Log("playerDeckList-DrawCardFromDeck() playerDeckList[draw]: " + playerDeckList[draw].GetName());
         Card drawCard = playerDeckList[draw];
         cardUIController.DrawCardUIToHand(drawCard);
 
@@ -118,7 +118,7 @@ public class DeckManager : MonoBehaviour
     public void AddNewCardToDeck(cardCord code)
     {
         Card copyCard = cardDataManager.GetCardDataByNum(code);
-        cardViewer.SetupCardData(copyCard);
+        cardUIController.MakeCardInstance(copyCard);
         playerDeckList.Add(copyCard);
     }
 }

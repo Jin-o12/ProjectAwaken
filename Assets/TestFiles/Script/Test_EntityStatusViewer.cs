@@ -5,11 +5,11 @@ using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
 
-public class StatusViewer : MonoBehaviour
+public class Test_EntityStatusViewer : MonoBehaviour
 {
     [Header("참조 스크립트")]
-    public CardUIController cardUIController;
-    public EntityDataManager statusManager;
+    public Test_CardUIController cardUIController;
+    public Test_EntityDataManager statusManager;
 
     [Header("UI")]
     public TextMeshProUGUI nameText;
@@ -22,8 +22,8 @@ public class StatusViewer : MonoBehaviour
 
     public void Start()
     {
-        cardUIController = GameObject.Find("UI_CardInfo").GetComponent<CardUIController>();
-        statusManager = GameObject.Find("GameSystem").GetComponent<EntityDataManager>();
+        cardUIController = GameObject.Find("UI_CardInfo").GetComponent<Test_CardUIController>();
+        statusManager = GameObject.Find("GameSystem").GetComponent<Test_EntityDataManager>();
     }
 
     public void Setup(Status obj)

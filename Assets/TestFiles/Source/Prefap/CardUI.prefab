@@ -141,7 +141,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 0
+  m_text: 5
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 20d2f8f55d907ba4d9485883374df09b, type: 2}
   m_sharedMaterial: {fileID: -7280980666846411678, guid: 20d2f8f55d907ba4d9485883374df09b, type: 2}
@@ -320,8 +320,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 36}
-  m_SizeDelta: {x: 0, y: 80}
+  m_AnchoredPosition: {x: 0, y: -10}
+  m_SizeDelta: {x: 0, y: 170}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6645371519501983744
 CanvasRenderer:
@@ -351,7 +351,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 28e763d44229de7449c71144613a03f6, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -426,7 +426,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: <Effect>
+  m_text: "\uD53C\uD574\uB97C \uC90D\uB2C8\uB2E4"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 20d2f8f55d907ba4d9485883374df09b, type: 2}
   m_sharedMaterial: {fileID: -7280980666846411678, guid: 20d2f8f55d907ba4d9485883374df09b, type: 2}
@@ -635,7 +635,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 0
+  m_text: 7
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 20d2f8f55d907ba4d9485883374df09b, type: 2}
   m_sharedMaterial: {fileID: -7280980666846411678, guid: 20d2f8f55d907ba4d9485883374df09b, type: 2}
@@ -769,7 +769,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: <Card Name>
+  m_text: Attack
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 20d2f8f55d907ba4d9485883374df09b, type: 2}
   m_sharedMaterial: {fileID: -7280980666846411678, guid: 20d2f8f55d907ba4d9485883374df09b, type: 2}
@@ -880,7 +880,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 20, y: 25}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 190}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &293965804327604784
@@ -897,7 +897,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardUIController: {fileID: 0}
   cardDataManager: {fileID: 0}
-  cardSnapSlot: {fileID: 0}
   backImage: {fileID: 8317498532618270890}
   frontImage: {fileID: 800574473573817377}
   artworkImage: {fileID: 8263021941095898189}

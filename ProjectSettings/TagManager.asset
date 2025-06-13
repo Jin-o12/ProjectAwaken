@@ -9,6 +9,7 @@ TagManager:
   - Card
   - HandSlot
   - ReadySlot
+  - Button
   layers:
   - Default
   - TransparentFX

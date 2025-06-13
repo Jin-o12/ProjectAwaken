@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EntityUIController : MonoBehaviour
+public class Test_EntityUIController : MonoBehaviour
 {
     [Header("참조 스크립트")]
-    [SerializeField] EntityDataManager entityDataManager;
+    [SerializeField] Test_EntityDataManager entityDataManager;
 
     [Header("카드 UI")]
     [SerializeField] public Transform fieldPanel;
@@ -24,11 +24,11 @@ public class EntityUIController : MonoBehaviour
         RectTransform Rt = obj.GetComponent<RectTransform>();
         
         // Player와 Enemy일 경우에 따라 좌우 배치 구분
-        if (entity is PlayerStatus)
+        if (entity is tPlayerStatus)
         {
             Rt.anchoredPosition = new Vector2(PLAYER_X_POS, PLAYER_Y_POS);
         }
-        else if (entity is EnemyStatus)
+        else if (entity is tEnemyStatus)
         {
             Rt.anchoredPosition = new Vector2(ENEMY_X_POS, ENEMY_Y_POS); ;
         }
@@ -38,7 +38,7 @@ public class EntityUIController : MonoBehaviour
         }
 
         // 기본 설정을 위한 컴포넌트 생성 및 Setup
-        StatusViewer view = obj.GetComponent<StatusViewer>();
+        Test_EntityStatusViewer view = obj.GetComponent<Test_EntityStatusViewer>();
         view.Setup(entity);
     }
 

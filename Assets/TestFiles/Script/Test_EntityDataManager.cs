@@ -27,17 +27,17 @@ public class Status
     public Status() { }
 }
 
-public class PlayerStatus : Status
+public class tPlayerStatus : Status
 {
-    public PlayerStatus(int hp)
+    public tPlayerStatus(int hp)
     {
         this.hp = hp;
     }
 }
 
-public class EnemyStatus : Status
+public class tEnemyStatus : Status
 {
-    public EnemyStatus(string name, int hp)
+    public tEnemyStatus(string name, int hp)
     {
         this.name = name;
         this.hp = hp;
@@ -49,14 +49,14 @@ public class EnemyStatus : Status
     }
 }
 
-public class EntityDataManager : MonoBehaviour
+public class Test_EntityDataManager : MonoBehaviour
 {
     [Header("참조 스크립트")]
-    [SerializeField] EntityUIController entityUIController;
-    [SerializeField] CardUIController cardUIController;
+    [SerializeField] Test_EntityUIController entityUIController;
+    [SerializeField] Test_CardUIController cardUIController;
 
-    public PlayerStatus player = new PlayerStatus(30);
-    public EnemyStatus enemy = new EnemyStatus("creature", 30);
+    public tPlayerStatus player = new tPlayerStatus(30);
+    public tEnemyStatus enemy = new tEnemyStatus("creature", 30);
     void Start()
     {
     }
@@ -67,7 +67,7 @@ public class EntityDataManager : MonoBehaviour
     }
 
     /* 전투 시작시 기본 셋팅 */
-    public PlayerStatus BattleBegin_PlayerSetting()
+    public tPlayerStatus BattleBegin_PlayerSetting()
     {
         if (player == null)
             Debug.LogError("EntityDataManager: player obj Does not exist");
@@ -79,7 +79,7 @@ public class EntityDataManager : MonoBehaviour
 
         return player;
     }
-    public EnemyStatus BattleBegin_EnemySetting(enemyCode code)
+    public tEnemyStatus BattleBegin_EnemySetting(enemyCode code)
     {
         if (enemy == null)
             Debug.LogError("EntityDataManager: enemy obj Does not exist");

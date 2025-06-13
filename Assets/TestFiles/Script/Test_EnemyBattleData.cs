@@ -10,7 +10,7 @@ public enum enemyCode
     Test_enemy_1 = 01
 };
 
-public class EnemyBattleData : MonoBehaviour
+public class Test_EnemyBattleData : MonoBehaviour
 {
     cardCord[][] Pattern_Test_enemy_1 = new cardCord[][]
     {

@@ -1,0 +1,44 @@
+[
+  {
+    "name": "Slash",
+    "value": 5,
+    "chain": 3,
+    "artworkIndex": 1,
+    "target": "Enemy",
+    "cord": 101
+  },
+  {
+    "name": "Quick Bash",
+    "value": 1,
+    "chain": 5,
+    "artworkIndex": 2,
+    "target": "Enemy",
+    "cord": 102
+  },
+  {
+    "name": "Counter",
+    "value": 5,
+    "chain": 2,
+    "artworkIndex": 3,
+    "target": "Enemy",
+    "cord": 103
+  },
+  {
+    "name": "Spill",
+    "value": 0,
+    "chain": 7,
+    "artworkIndex": 4,
+    "target": "Enemy",
+    "cord": 104
+  },
+
+  
+  {
+    "name": "EMPTY",
+    "value": 0,
+    "chain": 0,
+    "artworkIndex": 0,
+    "target": "EMPTY",
+    "cord": "EMPTY"
+  }
+]

@@ -1,0 +1,19 @@
+[
+  {
+    "name": "Awaker",
+    "hp": 5,
+    "cord": 1
+  },
+  {
+    "name": "Dummy",
+    "hp": 5,
+    "cord": 101
+  },
+
+  
+  {
+    "name": "EMPTY",
+    "hp": 0,
+    "cord": 0
+  }
+]
