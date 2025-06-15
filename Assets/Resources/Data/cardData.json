@@ -3,42 +3,45 @@
     "name": "Slash",
     "value": 5,
     "chain": 3,
-    "artworkIndex": 1,
+    "artworkPath": "CardArtworks/Card_Artwork_Slash",
     "target": "Enemy",
-    "cord": 101
+    "code": 101,
+    "effectCode": "eff_attack"
   },
   {
     "name": "Quick Bash",
     "value": 1,
     "chain": 5,
-    "artworkIndex": 2,
+    "artworkPath": "CardArtworks/Card_Artwork_QuickBash",
     "target": "Enemy",
-    "cord": 102
+    "code": 102,
+    "effectCode": "eff_attack"
   },
   {
     "name": "Counter",
     "value": 5,
     "chain": 2,
-    "artworkIndex": 3,
+    "artworkPath": "CardArtworks/Card_Artwork_Counter",
     "target": "Enemy",
-    "cord": 103
+    "code": 103,
+    "effectCode": "eff_attack"
   },
   {
     "name": "Spill",
     "value": 0,
     "chain": 7,
-    "artworkIndex": 4,
+    "artworkPath": "CardArtworks/Card_Artwork_Spill",
     "target": "Enemy",
-    "cord": 104
+    "code": 104,
+    "effectCode": "eff_attack"
   },
-
-  
   {
     "name": "EMPTY",
     "value": 0,
     "chain": 0,
-    "artworkIndex": 0,
+    "artworkPath": "CardArtworks/Card_Artwork_Error",
     "target": "EMPTY",
-    "cord": "EMPTY"
+    "code": "EMPTY",
+    "effectCode": "eff_attack"
   }
 ]

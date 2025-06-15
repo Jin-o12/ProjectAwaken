@@ -50,8 +50,7 @@ public class MainPageController : MonoBehaviour
 
     public void ButtonGameStart()
     {
-        /// 현재는 테스트 씬으로 이동, 차후 수정 ///
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("StageField");
     }
 
     public void ButtonSetting()

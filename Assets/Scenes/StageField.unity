@@ -151,6 +151,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c0ff9c372d4dbe459aff68c17917463, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  entityPrefab: {fileID: 1320204862192058500, guid: 7bd8dd66e6d31c0499425e77c5c9a93e, type: 3}
+  StageFieldUI: {fileID: 982131655}
 --- !u!4 &45654182
 Transform:
   m_ObjectHideFlags: 0

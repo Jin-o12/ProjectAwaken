@@ -2,18 +2,16 @@
   {
     "name": "Awaker",
     "hp": 5,
-    "cord": 1
+    "code": 1
   },
   {
     "name": "Dummy",
     "hp": 5,
-    "cord": 101
-  },
-
-  
+    "code": 101
+  },  
   {
     "name": "EMPTY",
     "hp": 0,
-    "cord": 0
+    "code": 0
   }
 ]
