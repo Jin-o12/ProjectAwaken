@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class StageInteractiveManager : MonoBehaviour
 {
+    [Header("참조 컴포넌트")]
+    [SerializeField] PlayerDeckManager playerDeckManager;
+
     [SerializeField] GameObject entityPrefab;
     [SerializeField] RectTransform StageFieldUI;
     
@@ -13,20 +16,20 @@ public class StageInteractiveManager : MonoBehaviour
         /// 스테이지가 존재하지 않으므로 바로 배틀씬으로 넘어가게 함, 기능 추가에 따라 수정해 나갈 것 ///
 
         // 플레이어블 캐릭터 설정
-        GameConstants.playerData = EntityDataLoader.GetPlayerStatusById(EntityCord.Entity_Awaker);
+        GameConstants.playerData = EntityDataLoader.GetPlayerStatusById(EntityCode.Entity_Awaker);
 
         // 플레이어 덱에 카드 설정
-        GameConstants.DeckList[0] = CardDataLoader.GetCardInfoByCode(CardCode.Card_char1_Slash);
-        GameConstants.DeckList[1] = CardDataLoader.GetCardInfoByCode(CardCode.Card_char1_QuickBash);
-        GameConstants.DeckList[2] = CardDataLoader.GetCardInfoByCode(CardCode.Card_char1_Counter);
-        GameConstants.DeckList[3] = CardDataLoader.GetCardInfoByCode(CardCode.Card_char1_Spill);
+        playerDeckManager.AddCardInDeckList(CardCode.Card_char1_Slash);
+        playerDeckManager.AddCardInDeckList(CardCode.Card_char1_QuickBash);
+        playerDeckManager.AddCardInDeckList(CardCode.Card_char1_Counter);
+        playerDeckManager.AddCardInDeckList(CardCode.Card_char1_Spill);        
 
         // 스테이지에 보일 플레이어 오브젝트
-        GameObject playerObj = Instantiate(entityPrefab, StageFieldUI);
+            GameObject playerObj = Instantiate(entityPrefab, StageFieldUI);
         GameConstants.playerData.SetObjcet(playerObj);
 
         // 적 설정
-        BattleBegin(EntityCord.Entity_Dummy_1);
+        BattleBegin(EntityCode.Entity_Dummy_1);
     }
 
     void Update()
@@ -34,10 +37,10 @@ public class StageInteractiveManager : MonoBehaviour
 
     }
 
-    void BattleBegin(EntityCord cord)
+    void BattleBegin(EntityCode code)
     {
-        Debug.Log("Send Enemy Code: " + cord);
-        GameConstants.nowBattleEnemy = cord;
+        Debug.Log("Send Enemy Code: " + code);
+        GameConstants.nowBattleEnemyCode = code;
         // 씬 바뀌면서 삭제될 것이기 때문에 백업하고 삭제
         UIStaticConfig.playerObjectInStage = GameConstants.playerData.GetObjcet();
         GameConstants.playerData.SetObjcet(null);

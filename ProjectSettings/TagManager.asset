@@ -10,6 +10,7 @@ TagManager:
   - HandSlot
   - ReadySlot
   - Button
+  - SnapZone
   layers:
   - Default
   - TransparentFX

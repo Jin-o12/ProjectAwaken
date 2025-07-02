@@ -132,6 +132,7 @@ GameObject:
   m_Component:
   - component: {fileID: 45654182}
   - component: {fileID: 45654181}
+  - component: {fileID: 45654183}
   m_Layer: 0
   m_Name: GameSystem
   m_TagString: Untagged
@@ -151,6 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c0ff9c372d4dbe459aff68c17917463, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerDeckManager: {fileID: 45654183}
   entityPrefab: {fileID: 1320204862192058500, guid: 7bd8dd66e6d31c0499425e77c5c9a93e, type: 3}
   StageFieldUI: {fileID: 982131655}
 --- !u!4 &45654182
@@ -168,6 +170,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &45654183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 45654180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d279f0f29de5d6944962cee785c49270, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &318348759
 GameObject:
   m_ObjectHideFlags: 0

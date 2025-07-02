@@ -16,9 +16,7 @@ public class Test_DeckManager : MonoBehaviour
     [SerializeField] public Test_CardViewer cardViewer;
 
     /* 플레이어 손패, 덱, 버린덱 */
-    private int handSize;
-    private int chainStack;
-    private int nextTurnDraw;
+    private int handSize;    private int nextTurnDraw;
     private List<Card> playerHandList = new List<Card>();
     private List<Card> playerDeckList = new List<Card>();
     private List<Card> playerdiscardPile = new List<Card>();
@@ -45,7 +43,6 @@ public class Test_DeckManager : MonoBehaviour
     public void BattleBegin_CardSetting(enemyCode code)
     {
         handSize = GameConstants.handSize;
-        chainStack = 0;
         nextTurnDraw = 1;
 
         for (int c = 0; c < handSize; c++)

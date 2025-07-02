@@ -1,0 +1,20 @@
+{
+  "turns": {
+    "pattern1": [
+      { "cardId": "attack1", "params": {} },
+      { "cardId": "attack2", "params": {} },
+      { "cardId": "attack3", "params": {} }
+    ],
+    "pattern2": [
+      { "cardId": "attack2", "params": {} },
+      { "cardId": "attack1", "params": {} }
+    ],
+    "pattern3": [
+      { "cardId": "attack3", "params": {} }
+    ]
+  },
+  "transitions": [
+    { "from": "pattern1", "to": "pattern2", "condition": "hp < 50" },
+    { "from": "pattern2", "to": "pattern3", "condition": "turnCount >= 5" }
+  ]
+}

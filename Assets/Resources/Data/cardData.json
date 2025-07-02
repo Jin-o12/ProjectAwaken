@@ -4,6 +4,7 @@
     "value": 5,
     "chain": 3,
     "artworkPath": "CardArtworks/Card_Artwork_Slash",
+    "explan": "",
     "target": "Enemy",
     "code": 101,
     "effectCode": "eff_attack"
@@ -13,6 +14,7 @@
     "value": 1,
     "chain": 5,
     "artworkPath": "CardArtworks/Card_Artwork_QuickBash",
+    "explan": "",
     "target": "Enemy",
     "code": 102,
     "effectCode": "eff_attack"
@@ -22,6 +24,7 @@
     "value": 5,
     "chain": 2,
     "artworkPath": "CardArtworks/Card_Artwork_Counter",
+    "explan": "{value+2} 이하의 피해를 무효화 합니다",
     "target": "Enemy",
     "code": 103,
     "effectCode": "eff_attack"
@@ -31,6 +34,7 @@
     "value": 0,
     "chain": 7,
     "artworkPath": "CardArtworks/Card_Artwork_Spill",
+    "explan": "다음 차례에 카드 1장을 더 얻습니다",
     "target": "Enemy",
     "code": 104,
     "effectCode": "eff_attack"
@@ -40,6 +44,7 @@
     "value": 0,
     "chain": 0,
     "artworkPath": "CardArtworks/Card_Artwork_Error",
+    "explan": "EMPTY",
     "target": "EMPTY",
     "code": "EMPTY",
     "effectCode": "eff_attack"
