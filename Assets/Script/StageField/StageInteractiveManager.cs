@@ -17,6 +17,7 @@ public class StageInteractiveManager : MonoBehaviour
 
         // 플레이어블 캐릭터 설정
         GameConstants.playerData = EntityDataLoader.GetPlayerStatusById(EntityCode.Entity_Awaker);
+        GameConstants.playerCode = EntityCode.Entity_Awaker;
 
         // 플레이어 덱에 카드 설정
         playerDeckManager.AddCardInDeckList(CardCode.Card_char1_Slash);
@@ -25,22 +26,18 @@ public class StageInteractiveManager : MonoBehaviour
         playerDeckManager.AddCardInDeckList(CardCode.Card_char1_Spill);        
 
         // 스테이지에 보일 플레이어 오브젝트
-            GameObject playerObj = Instantiate(entityPrefab, StageFieldUI);
+        GameObject playerObj = Instantiate(entityPrefab, StageFieldUI);
         GameConstants.playerData.SetObjcet(playerObj);
 
         // 적 설정
         BattleBegin(EntityCode.Entity_Dummy_1);
     }
 
-    void Update()
-    {
-
-    }
-
     void BattleBegin(EntityCode code)
     {
         Debug.Log("Send Enemy Code: " + code);
         GameConstants.nowBattleEnemyCode = code;
+
         // 씬 바뀌면서 삭제될 것이기 때문에 백업하고 삭제
         UIStaticConfig.playerObjectInStage = GameConstants.playerData.GetObjcet();
         GameConstants.playerData.SetObjcet(null);

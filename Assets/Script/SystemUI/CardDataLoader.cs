@@ -126,6 +126,7 @@ public static class CardEffects
     public static void eff_attack(EntityStatus target, int dmg)
     {
         target.ApplyDamage(dmg);
+        Debug.Log("eff_attack");
     }
     public static void eff_drawCard(EntityStatus target, int dmg)
     {

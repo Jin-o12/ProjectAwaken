@@ -13,31 +13,26 @@ public class EntityStatusViewer : MonoBehaviour
     public TextMeshProUGUI hpText;
     
 
-    public Status statusData;
+    public EntityStatus statusData;
     private int maxHP;
 
     public void Start()
     {
     }
 
-    public void Setup(Status obj)
+    public void Setup(EntityStatus obj)
     {
         // // ※참조복사 주의
-        // statusData = obj;
-        // maxHP = statusData.GetHP();
+        statusData = obj;
+        
+        maxHP = statusData.GetHP();
 
-        // if (statusData.GetName() == null)
-        //     nameText.text = $"";
-        // else
-        //     nameText.text = statusData.GetName();
+        if (statusData.GetName() == null)
+            nameText.text = $"";
+        else
+            nameText.text = statusData.GetName();
 
-        // hpText.text = $"{statusData.GetHP()}/{maxHP}";
-    }
-
-    //이벤트 트리거 방식으로 변경
-    void Update()
-    {
-        //RewritingStatusUI();
+        hpText.text = $"{statusData.GetHP()}/{maxHP}";
     }
 
     public void RewritingStatusUI()

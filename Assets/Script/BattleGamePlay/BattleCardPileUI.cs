@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.Splines;
 using System.Linq;
 using DG.Tweening;
-using UnityEngine.EventSystems;
 
 /// <summary>
 /// 한 게임 세션동안 유지되는 모든 카드들의 데이터를 저장 및 수정
@@ -19,7 +18,11 @@ public class BattleCardPileUI : MonoBehaviour
     [SerializeField] public RectTransform HandListUI;
 
     [Header("Splines 속성")]
-    [SerializeField] private SplineContainer splineContainer;
+    [SerializeField] private GameObject handSpline;
+    [SerializeField] private GameObject PlayerReadySpline;
+    [SerializeField] private SplineContainer handSplineContainer;
+    [SerializeField] private SplineContainer PlayerReadySplineContainer;
+    [SerializeField] private SplineContainer EnemyReadySplineContainer;
     [SerializeField] private Transform spawnPoint;
 
     [Header("Prefaps")]
@@ -29,12 +32,12 @@ public class BattleCardPileUI : MonoBehaviour
 
     /* 플레이어 손패, 덱, 버린덱 */
     private int handSize = GameConstants.handSize;
-    private List<CardViewer> handCardPile = new();                               // 손패 카드 리스트
     private List<CardInfo> DrawCardPile = new();                                // 손패 카드 리스트 CardInfo
-    private List<CardInfo> TrashCardPile = new List<CardInfo>();
+    private List<CardInfo> TrashCardPile = new();
+    private List<CardViewer> handCardPile = new();                               // 손패 카드 리스트
     private List<CardViewer> ReadyCardQueue = new();                            // Ready 슬롯 내 카드 목록
-    private List<GameObject> ReadyslotsTrans = new List<GameObject>();          // Ready 슬롯 내 각 스냅 슬롯의 Transform 정보
-    //private float snapThreshold = 0.5f;                                       // 스냅 인식 최소 범위
+    private CardViewer handlingCard = null;
+    private List<Transform> ReadyslotsTrans = new List<Transform>();          // Ready 슬롯 내 각 스냅 슬롯의 Transform 정보
 
     /* 적 정보 */
     private cardCord[][] EnemyActionList;
@@ -43,8 +46,8 @@ public class BattleCardPileUI : MonoBehaviour
     public void BattleUISetting_Card()
     {
         InitDrawCardPile();
-        SetupReadySnapSlot();
-        //TurnBeginAnimation();
+        UpdateReadySnapSlot();
+        /////TurnBeginAnimation();///////
         DrawCard();
     }
 
@@ -53,24 +56,14 @@ public class BattleCardPileUI : MonoBehaviour
     {
         return ReadyCardQueue;
     }
-
-    /* 손패의 카드를 대기 큐에 적재 */
-    public void AddCardInReadyFromHand(GameObject card, int snapZonePos)
+    public List<CardViewer> GetCardInHand()
     {
-        CardViewer moveCardViewer = card.GetComponent<CardViewer>();
+        return handCardPile;
+    }
 
-        // 손패 내에서 동일 카드 찾아 저장하고 손패에서 제거
-        CardViewer handCard = handCardPile.Find(card => card.GetCardData().GetID() == moveCardViewer.GetCardData().GetID());
-        handCardPile.Remove(handCard);
-
-        // 카드 배치 및 부모 변경
-        RectTransform rtSlot = ReadyslotsTrans[snapZonePos].GetComponent<RectTransform>();
-        card.transform.SetParent(playerReadyQueueUI);
-        card.GetComponent<RectTransform>().anchoredPosition = ReadyslotsTrans[snapZonePos].GetComponent<RectTransform>().anchoredPosition;
-        
-
-        // 카드 정보 저장
-        ReadyCardQueue[snapZonePos] = moveCardViewer;
+    public void SetHandlingCard(CardViewer card)
+    {
+        handlingCard = card;
     }
 
     /* 드로우 덱 초기 세팅: GameContants의 데이터를 바탕으로 받아옴 */
@@ -135,7 +128,7 @@ public class BattleCardPileUI : MonoBehaviour
             GameObject cardPre = Instantiate(cardPrefab, spawnPoint.position, spawnPoint.rotation);
 
             // 부모에 위치값 상속 및 크기 조절
-            cardPre.transform.SetParent(splineContainer.transform, worldPositionStays: false);
+            cardPre.transform.SetParent(handSplineContainer.transform, worldPositionStays: false);
             cardPre.GetComponent<RectTransform>().localScale *= 4;
 
             // 카드 인스턴스 생성 및 정보 세팅
@@ -153,12 +146,12 @@ public class BattleCardPileUI : MonoBehaviour
 
         float cardSpacing = 1.0f / GameConstants.handSize;   // 카드간의 거리 (스플라인 길이는 0~1 값)
         float firstCardPosition = 0.5f - (handCardPile.Count - 1) * cardSpacing / 2; //드로우 카드 갯수에 따라 첫 카드의 위치가 밀림
-        Spline spline = splineContainer.Spline;
+        Spline spline = handSplineContainer.Spline;
         for (int i = 0; i < handCardPile.Count; i++)
         {
             float p = firstCardPosition + i * cardSpacing;
 
-            //카드를 정렬하고 Spline 묶음을 살짝 회전 (손패가 원형이 되도록)
+            //카드 정렬
             Vector3 localPos = spline.EvaluatePosition(p);    // 곡선상 특정 위치(인자값)의 실제 좌표값 반환
             Vector3 worldPosition = HandListUI.transform.TransformPoint(localPos);
 
@@ -170,57 +163,90 @@ public class BattleCardPileUI : MonoBehaviour
         }
     }
 
-    /* 스냅 슬롯 생성 및 정렬 */
-    private void SetupReadySnapSlot()
+    /* 스냅 슬롯 카드 정렬 */
+    private void UpdateReadySnapSlot()
     {
-        float queueWidth = playerReadyQueueUI.rect.width;
-
         int slotNum = GameConstants.readyQueueSize;
+        float cardSpacing = 1.0f / slotNum;                     // 카드 간격
+        Spline spline = PlayerReadySplineContainer.Spline;      // 스플라인 지정
 
-        float slotAreaWidth = queueWidth * 0.9f;                // 슬롯이 사용할 전체 가로 영역
-        float slotSpacing = slotAreaWidth / slotNum;            // 슬롯 간의 간격
-        float startX = -slotAreaWidth / 2 + slotSpacing / 2;    // 첫 슬롯의 X 위치
-
-        for (int i = 0; i < slotNum; i++)
+        for (int i = 0; i < ReadyCardQueue.Count; i++)
         {
-            GameObject newSlot = Instantiate(snapSlotPrefab, playerReadyQueueUI);
-            RectTransform newSlotRt = newSlot.GetComponent<RectTransform>();
+            // 빈 공간에 대해서는 카드 배치 하지 않음
+            if (ReadyCardQueue[i] == null)
+                continue;
 
-            //float x = startX + slotSpacing * i;
-            float x = startX + slotSpacing * (slotNum - 1 - i); // 플레이어는 정방향 정렬
-            newSlotRt.anchoredPosition = new Vector2(x, 0);
+            float p = 1.0f - i * cardSpacing;
 
-            ReadyslotsTrans.Add(newSlot);
-            ReadyCardQueue.Add(null);
+            //카드 정렬
+            Vector3 localPos = spline.EvaluatePosition(p);    // 곡선상 특정 위치(인자값)의 실제 좌표값 반환
+            Vector3 worldPosition = playerReadyQueueUI.transform.TransformPoint(localPos);
+
+            Vector3 forward = spline.EvaluateTangent(p);            // 곡선상 특정 위치(인자값)에서의 접선벡터 방향
+            Vector3 up = spline.EvaluateUpVector(p);                // 곡선상 특정 위치(인자값)에서의 위쪽 방향
+            Quaternion rotation = Quaternion.LookRotation(up, Vector3.Cross(up, forward).normalized);
+            ReadyCardQueue[i].transform.DOMove(worldPosition, 0.25f);
+            ReadyCardQueue[i].transform.DOLocalRotateQuaternion(rotation, 0.25f);
         }
+
+
+        // float queueWidth = playerReadyQueueUI.rect.width;
+
+        // int slotNum = GameConstants.readyQueueSize;
+
+        // float slotAreaWidth = queueWidth * 0.9f;                // 슬롯이 사용할 전체 가로 영역
+        // float slotSpacing = slotAreaWidth / slotNum;            // 슬롯 간의 간격
+        // float startX = -slotAreaWidth / 2 + slotSpacing / 2;    // 첫 슬롯의 X 위치
+
+        // for (int i = 0; i < slotNum; i++)
+        // {
+        //     GameObject newSlot = Instantiate(snapSlotPrefab, playerReadyQueueUI);
+        //     RectTransform newSlotRt = newSlot.GetComponent<RectTransform>();
+
+        //     float x = startX + slotSpacing * (slotNum - 1 - i);
+        //     newSlotRt.anchoredPosition = new Vector2(x, 0);
+
+        //     ReadyslotsTrans.Add(newSlot);
+        // }
     }
 
-    // /* 카드 드래그 앤 드롭시 위치 및 데이터 이동 */
-    // public void CardPutOnSnapSlot(PointerEventData card, GameObject snapZone)
-    // {
-    //     GameObject cardObj = card.pointerDrag;          // 카드 오브젝트
-    //     Vector2 screenPosition = card.position;         // 드롭시 화면상 위치
+    public void PickupHandCard(GameObject cardObject)
+    {
+        CardInfo cardInfo = cardObject.GetComponent<CardViewer>().GetCardInfo();
+        CardViewer findCard = handCardPile.Find(card => card.GetCardInfo().GetID() == cardInfo.GetID());    // 손패에서 동일 카드 찾기
+        handlingCard = findCard;
+        Debug.Log(findCard);
+        handCardPile.Remove(findCard);
+    }
 
-    //     RectTransform cardRt = cardObj.GetComponent<RectTransform>();
-    //     RectTransform snapZoneRt = snapZone.GetComponent<RectTransform>();
+    public void PutDownHandCard()
+    {
+        handCardPile.Add(handlingCard);
 
-    //     cardRt = snapZoneRt;
+        // 카드 배치 및 부모 변경
+        handlingCard.transform.SetParent(handSpline.transform);
+        UpdateCardPositions();
 
-    //     if (snapZone.CompareTag("ReadySlot"))
-    //     {
-    //         int cardIndex = handCardPile.IndexOf(cardObj.GetComponent<CardViewer>());
-    //         handCardPile.RemoveAt(cardIndex);
-    //         ReadyCardQueue.Add(cardObj.GetComponent<CardViewer>()); //순서대로 적재되게 바꿀 것
-            
-    //     }
-    //     else if (snapZone.CompareTag("HandSlot"))
-    //     {
-    //         int cardIndex = handCardPile.IndexOf(cardObj.GetComponent<CardViewer>());
-    //         ReadyCardQueue.RemoveAt(cardIndex);
-    //         handCardPile.Add(cardObj.GetComponent<CardViewer>());
-    //     }
-            
-    //     UpdateCardPositions();
-    //     //부모 바꾸는 코드 eventData.pointerDrag.transform.SetParent(transform);
-    // }
+        handlingCard = null;     // 카드 내려놓음
+    }
+
+    public void PickupReadyCard(GameObject cardObject)
+    {
+        CardInfo cardInfo = cardObject.GetComponent<CardViewer>().GetCardInfo();
+        CardViewer findCard = ReadyCardQueue.Find(card => card.GetCardInfo().GetID() == cardInfo.GetID());    // 손패에서 동일 카드 찾기
+        handlingCard = findCard;
+        ReadyCardQueue.Remove(findCard);
+        UpdateReadySnapSlot();
+    }
+
+    public void PutDownReadyCard()
+    {
+        ReadyCardQueue.Add(handlingCard);
+
+        // 카드 배치 및 부모 변경
+        handlingCard.transform.SetParent(PlayerReadySpline.transform);
+        UpdateReadySnapSlot();
+
+        handlingCard = null;     // 카드 내려놓음
+    }
 }

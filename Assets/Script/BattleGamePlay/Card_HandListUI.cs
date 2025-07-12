@@ -14,18 +14,8 @@ public class Card_HandListUI : MonoBehaviour
         battleCardPileUI = GetComponentInParent<BattleCardPileUI>();
     }
 
-    public void AddCard(PointerEventData card)
+    public void AddCard()
     {
-        // cardInfoList[nowSlot] = card.pointerDrag.GetComponent<CardViewer>().GetCardInfo();  //카드 데이터 저장
-        // battleCardPileUI.AddCardInReadyFromHand(card.pointerDrag, nowSlot);
-        // nowSlot++;
-    }
-
-    /* 카드 제거 */
-    public void RemoveCard(PointerEventData card, GameObject snapZone)
-    {
-        // cardInfoList[nowSlot] = card.pointerDrag.GetComponent<CardViewer>().GetCardInfo();  //카드 데이터 저장
-        // nowSlot--;
-        // return nowSlot;
+        battleCardPileUI.PutDownHandCard();
     }
 }

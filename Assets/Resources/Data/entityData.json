@@ -1,17 +1,17 @@
 [
   {
     "name": "Awaker",
-    "hp": 5,
+    "hp": 20,
     "code": 1
   },
   {
     "name": "Dummy",
-    "hp": 5,
+    "hp": 20,
     "code": 101
   },  
   {
     "name": "EMPTY",
-    "hp": 0,
+    "hp": 1,
     "code": 0
   }
 ]

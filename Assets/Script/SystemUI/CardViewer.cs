@@ -30,6 +30,10 @@ public class CardViewer : MonoBehaviour
     {
         return cardData;
     }
+    public int GetCardID()
+    {
+        return GetCardData().GetID();
+    }
 
     /* 카드 오브젝트의 기본 값 설정 (카드 정보, 카드 인스턴스) */
     public void SetupCardData(CardInfo data, GameObject obj)
@@ -50,6 +54,6 @@ public class CardViewer : MonoBehaviour
     
     void OnDestroy()
     {
-        Debug.Log("이 오브젝트가 파괴될 때 호출됩니다.");
+        Debug.Log("카드 오브젝트가 파괴");
     }
 }

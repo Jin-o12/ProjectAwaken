@@ -11,6 +11,7 @@ TagManager:
   - ReadySlot
   - Button
   - SnapZone
+  - CardSpline
   layers:
   - Default
   - TransparentFX

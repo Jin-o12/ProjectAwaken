@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -10,60 +11,39 @@ public class Card_ReadyQueue : MonoBehaviour
     [SerializeField] public BattleFieldUI battleFieldUI;
     [SerializeField] public BattleCardPileUI battleCardPileUI;
 
-    CardInfo[] cardInfoList;                    // 대기열
+    List<CardViewer> cardInfoList;
     int nowSlot;
 
     void Awake()
     {
-        cardInfoList = new CardInfo[GameConstants.readyQueueSize];
-        for (int i = 0; i < cardInfoList.Length; i++)
-        {
-            cardInfoList[i] = null;
-        }
+        cardInfoList = battleCardPileUI.GetCardInQueue();
         nowSlot = 0;
     }
 
     /* 카드 추가 */
-    public void AddCard(PointerEventData card)
+    public void AddCard(GameObject cardObject)
     {
-        cardInfoList[nowSlot] = card.pointerDrag.GetComponent<CardViewer>().GetCardInfo();  //카드 데이터 저장
-        battleCardPileUI.AddCardInReadyFromHand(card.pointerDrag, nowSlot);
-        nowSlot++;
+        battleCardPileUI.PutDownReadyCard();
+        cardInfoList = battleCardPileUI.GetCardInQueue();
     }
 
-    /* 카드 제거 */
-    public int RemoveCard(PointerEventData card, GameObject snapZone)
+    public void RemoveCard(GameObject cardObject)
     {
-        int removeSlot = -1;
-        // 동일 카드를 배열 내에서 찾음
-        for (int i = 0; i < cardInfoList.Length; i++)
-        {
-            if (cardInfoList[i]!=null && cardInfoList[i].GetID() == card.pointerDrag.GetComponent<CardViewer>().GetCardInfo().GetID())
-                removeSlot = i;
-        }
-
-        if (removeSlot == -1)
-            Debug.LogWarning("제거 대상 카드가 존재하지 않음");
-        cardInfoList[removeSlot] = null;  //카드 데이터 제거
-
-        // UI 상에서 카드 오브젝트 이동
-        /// 여기에 코드 추가 ///
-        
-        nowSlot--;
-        return nowSlot;
+        cardInfoList = battleCardPileUI.GetCardInQueue();
     }
 
     public void PlayCardAction()
     {
-        for (int i = 0; i < cardInfoList.Length; i++)
+        cardInfoList = battleCardPileUI.GetCardInQueue();
+        foreach (CardViewer listCard in cardInfoList)
         {
-            CardInfo card = cardInfoList[i];
+            CardInfo card = listCard.GetCardInfo();
             EntityStatus target = null;
 
             // 대상 지정
-            if (card.GetTarget() == "Enemy")
+            if (card.GetTarget() == "Player")
                 target = battleFieldUI.GetPlayerStatus();
-            else if (card.GetTarget() == "Player")
+            else if (card.GetTarget() == "Enemy")
                 target = battleFieldUI.GetEnemyStatus();
 
             // 대상 존재시 실행
@@ -72,5 +52,6 @@ public class Card_ReadyQueue : MonoBehaviour
             else
                 Debug.Log("Card_ReadyQueue: target has no exist");
         }
+        battleFieldUI.UpdateEntityView();                    // 게임 화면 갱신
     }
 }
